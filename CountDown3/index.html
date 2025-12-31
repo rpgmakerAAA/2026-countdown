@@ -351,120 +351,61 @@
             }
         }
 
-        // 피아노 소리 생성
-        function playPiano(frequency, startTime, duration, volume = 0.15) {
-            if (!audioContext) return;
+        // 배경음악 - 앰비언트 패드 사운드
+        function createPadSound(frequency, duration, volume = 0.08) {
+            if (!audioContext) return null;
 
-            // 피아노 소리를 위한 다중 오실레이터
-            const oscillators = [];
+            const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             const filter = audioContext.createBiquadFilter();
 
+            oscillator.type = 'sine';
+            oscillator.frequency.value = frequency;
+
             filter.type = 'lowpass';
-            filter.frequency.value = 2000;
+            filter.frequency.value = 800;
+
+            oscillator.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(audioContext.destination);
 
-            // 기본음 + 배음들로 피아노 느낌
-            const harmonics = [1, 2, 3, 4];
-            const volumes = [1, 0.5, 0.25, 0.125];
+            // 부드러운 페이드 인/아웃
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 2);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + duration - 2);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
 
-            harmonics.forEach((h, i) => {
-                const osc = audioContext.createOscillator();
-                const oscGain = audioContext.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = frequency * h;
-                oscGain.gain.value = volumes[i] * volume;
-                osc.connect(oscGain);
-                oscGain.connect(filter);
-                osc.start(startTime);
-                osc.stop(startTime + duration + 0.5);
-                oscillators.push(osc);
-            });
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
 
-            // 피아노 엔벨로프 (빠른 어택, 서서히 감소)
-            gainNode.gain.setValueAtTime(0, startTime);
-            gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.02);
-            gainNode.gain.exponentialRampToValueAtTime(volume * 0.7, startTime + 0.1);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration + 0.3);
+            return { oscillator, gainNode };
         }
 
-        // 캐논 코드 진행 (D장조)
-        let canonIndex = 0;
-        let melodyIndex = 0;
-
-        // 파헬벨 캐논 베이스 코드 (D장조)
-        const canonChords = [
-            { bass: 146.83, chord: [293.66, 370.00, 440.00] },  // D
-            { bass: 110.00, chord: [220.00, 277.18, 329.63] },  // A
-            { bass: 123.47, chord: [246.94, 293.66, 370.00] },  // Bm
-            { bass: 92.50,  chord: [185.00, 220.00, 277.18] },  // F#m
-            { bass: 98.00,  chord: [196.00, 246.94, 293.66] },  // G
-            { bass: 146.83, chord: [293.66, 370.00, 440.00] },  // D
-            { bass: 98.00,  chord: [196.00, 246.94, 293.66] },  // G
-            { bass: 110.00, chord: [220.00, 277.18, 329.63] },  // A
-        ];
-
-        // 캐논 멜로디 (유명한 바이올린 파트)
-        const canonMelody = [
-            // 첫 번째 프레이즈
-            { note: 587.33, dur: 1 },    // D5
-            { note: 523.25, dur: 1 },    // C#5
-            { note: 493.88, dur: 1 },    // B4
-            { note: 440.00, dur: 1 },    // A4
-            { note: 392.00, dur: 1 },    // G4
-            { note: 369.99, dur: 1 },    // F#4
-            { note: 392.00, dur: 1 },    // G4
-            { note: 440.00, dur: 1 },    // A4
-            // 두 번째 프레이즈
-            { note: 587.33, dur: 0.5 },  // D5
-            { note: 523.25, dur: 0.5 },  // C#5
-            { note: 493.88, dur: 0.5 },  // B4
-            { note: 523.25, dur: 0.5 },  // C#5
-            { note: 440.00, dur: 0.5 },  // A4
-            { note: 493.88, dur: 0.5 },  // B4
-            { note: 392.00, dur: 0.5 },  // G4
-            { note: 440.00, dur: 0.5 },  // A4
-            { note: 369.99, dur: 0.5 },  // F#4
-            { note: 392.00, dur: 0.5 },  // G4
-            { note: 440.00, dur: 0.5 },  // A4
-            { note: 392.00, dur: 0.5 },  // G4
-            { note: 369.99, dur: 0.5 },  // F#4
-            { note: 329.63, dur: 0.5 },  // E4
-            { note: 369.99, dur: 0.5 },  // F#4
-            { note: 440.00, dur: 0.5 },  // A4
-        ];
-
-        function playCanonSection() {
+        // 아르페지오 멜로디
+        function playArpeggio() {
             if (!audioContext || !bgmPlaying) return;
 
+            const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63]; // C4, E4, G4, C5, G4, E4
             const baseTime = audioContext.currentTime;
-            const beatDuration = 0.5; // 한 박자 길이
 
-            // 베이스와 코드 연주 (8마디)
-            for (let i = 0; i < 8; i++) {
-                const chordData = canonChords[(canonIndex + i) % 8];
-                const chordTime = baseTime + i * beatDuration * 2;
+            notes.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
 
-                // 베이스음
-                playPiano(chordData.bass, chordTime, beatDuration * 2, 0.12);
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
 
-                // 코드 아르페지오
-                chordData.chord.forEach((note, j) => {
-                    playPiano(note, chordTime + j * 0.15, beatDuration * 1.5, 0.08);
-                });
-            }
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
 
-            // 멜로디 연주
-            let melodyTime = baseTime;
-            for (let i = 0; i < 8; i++) {
-                const note = canonMelody[(melodyIndex + i) % canonMelody.length];
-                playPiano(note.note, melodyTime, note.dur * beatDuration * 1.2, 0.18);
-                melodyTime += note.dur * beatDuration;
-            }
+                const startTime = baseTime + i * 0.5;
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.06, startTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.45);
 
-            canonIndex = (canonIndex + 8) % 8;
-            melodyIndex = (melodyIndex + 8) % canonMelody.length;
+                osc.start(startTime);
+                osc.stop(startTime + 0.5);
+            });
         }
 
         // 배경음악 시작
@@ -475,19 +416,37 @@
             if (!audioContext) return;
 
             bgmPlaying = true;
-            canonIndex = 0;
-            melodyIndex = 0;
             document.getElementById('musicControl').textContent = '🔊';
 
-            // 즉시 첫 섹션 재생
-            playCanonSection();
+            // 지속적인 패드 코드 (C major)
+            function playPadChord() {
+                if (!bgmPlaying) return;
+                const chords = [
+                    [130.81, 164.81, 196.00], // C3, E3, G3
+                    [146.83, 174.61, 220.00], // D3, F3, A3
+                    [164.81, 196.00, 246.94], // E3, G3, B3
+                    [130.81, 164.81, 196.00], // C3, E3, G3
+                ];
+                const chord = chords[Math.floor(Math.random() * chords.length)];
+                chord.forEach(freq => createPadSound(freq, 8, 0.06));
+            }
 
-            // 8박자마다 반복 (4초)
+            // 초기 패드 시작
+            playPadChord();
+
+            // 8초마다 새 코드
             bgmInterval = setInterval(() => {
                 if (bgmPlaying) {
-                    playCanonSection();
+                    playPadChord();
                 }
-            }, 4000);
+            }, 8000);
+
+            // 3초마다 아르페지오
+            setInterval(() => {
+                if (bgmPlaying && Math.random() > 0.3) {
+                    playArpeggio();
+                }
+            }, 3000);
         }
 
         // 배경음악 중지

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026년부터는 중딩!!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <title>2026 새해 카운트다운</title>
     <style>
         * {
             margin: 0;
@@ -18,110 +17,21 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #f5f0e6;
-            font-family: 'Space Grotesk', sans-serif;
-            color: #1a1a1a;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
             overflow: hidden;
-            position: relative;
-        }
-
-        /* 피카소 스타일 배경 도형들 */
-        .bg-shape {
-            position: fixed;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .shape-1 {
-            width: 300px;
-            height: 300px;
-            background: #e63946;
-            top: -50px;
-            left: -50px;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            opacity: 0.7;
-        }
-
-        .shape-2 {
-            width: 250px;
-            height: 400px;
-            background: #457b9d;
-            bottom: -100px;
-            right: -50px;
-            clip-path: polygon(0 0, 100% 20%, 80% 100%, 20% 80%);
-            opacity: 0.6;
-        }
-
-        .shape-3 {
-            width: 200px;
-            height: 200px;
-            background: #f4a261;
-            top: 20%;
-            right: 10%;
-            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-            opacity: 0.5;
-        }
-
-        .shape-4 {
-            width: 150px;
-            height: 300px;
-            background: #2a9d8f;
-            bottom: 10%;
-            left: 5%;
-            clip-path: polygon(20% 0%, 100% 10%, 80% 90%, 0% 100%);
-            opacity: 0.5;
-        }
-
-        .shape-5 {
-            width: 180px;
-            height: 180px;
-            border: 8px solid #1d3557;
-            top: 60%;
-            right: 20%;
-            transform: rotate(15deg);
-        }
-
-        .shape-6 {
-            width: 120px;
-            height: 120px;
-            background: #e9c46a;
-            top: 10%;
-            left: 20%;
-            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-            opacity: 0.6;
         }
 
         .container {
             text-align: center;
             z-index: 1;
-            padding: 3rem 4rem;
-            background: rgba(255, 255, 255, 0.9);
-            border: 4px solid #1a1a1a;
-            position: relative;
-            transform: rotate(-1deg);
-            box-shadow: 12px 12px 0 #1a1a1a;
         }
 
         h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
-            color: #1a1a1a;
-            letter-spacing: 4px;
-            margin-bottom: 0.5rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: -5px;
-            right: -5px;
-            height: 12px;
-            background: #e63946;
-            z-index: -1;
-            transform: rotate(-1deg);
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
         .countdown {
@@ -129,85 +39,65 @@
             gap: 1.5rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 2rem;
         }
 
         .time-block {
-            position: relative;
-            padding: 1.5rem 2rem;
-            min-width: 130px;
-            background: #fff;
-            border: 3px solid #1a1a1a;
-            transform: rotate(2deg);
-            transition: transform 0.3s ease;
-        }
-
-        .time-block:nth-child(2) {
-            transform: rotate(-2deg);
-            background: #e9c46a;
-        }
-
-        .time-block:nth-child(3) {
-            transform: rotate(1deg);
-            background: #457b9d;
-        }
-
-        .time-block:nth-child(3) .time-value,
-        .time-block:nth-child(3) .time-label {
-            color: #fff;
-        }
-
-        .time-block:hover {
-            transform: rotate(0deg) scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            min-width: 140px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .time-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 400;
-            color: #1a1a1a;
-            line-height: 1;
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .time-label {
-            font-size: 0.85rem;
+            font-size: 1.2rem;
             margin-top: 0.5rem;
-            color: #1a1a1a;
+            opacity: 0.8;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         .current-time {
-            margin-top: 2rem;
-            font-size: 1.1rem;
-            color: #666;
+            margin-top: 3rem;
+            font-size: 1.5rem;
+            opacity: 0.7;
         }
 
         .celebration {
             display: none;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
-            color: #1a1a1a;
-            position: relative;
+            font-size: 4rem;
+            animation: bounce 0.5s ease infinite alternate;
         }
 
-        .celebration::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -20px;
-            right: -20px;
-            height: 20px;
-            background: #2a9d8f;
-            z-index: -1;
-            transform: translateY(-50%) rotate(-2deg);
+        @keyframes bounce {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
 
         .firework {
             position: fixed;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
             animation: firework 1.5s ease-out forwards;
             pointer-events: none;
         }
@@ -225,11 +115,14 @@
             height: 100%;
             pointer-events: none;
             overflow: hidden;
-            z-index: 0;
         }
 
         .particle {
             position: absolute;
+            width: 10px;
+            height: 10px;
+            background: gold;
+            border-radius: 50%;
             animation: fall linear forwards;
         }
 
@@ -241,61 +134,56 @@
         }
 
         .audio-hint {
-            margin-top: 1.5rem;
-            padding: 0.7rem 1.2rem;
-            background: #1a1a1a;
-            border: none;
-            color: #f5f0e6;
-            font-size: 0.85rem;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 10px;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .audio-hint:hover {
-            background: #e63946;
-            transform: translateY(-2px);
+            background: rgba(255, 193, 7, 0.3);
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
         }
 
         .music-control {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            background: #1a1a1a;
-            border: 3px solid #1a1a1a;
-            width: 50px;
-            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             transition: all 0.3s ease;
             z-index: 100;
-            transform: rotate(5deg);
         }
 
         .music-control:hover {
-            background: #e63946;
-            transform: rotate(0deg);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
-    <!-- 피카소 스타일 배경 도형들 -->
-    <div class="bg-shape shape-1"></div>
-    <div class="bg-shape shape-2"></div>
-    <div class="bg-shape shape-3"></div>
-    <div class="bg-shape shape-4"></div>
-    <div class="bg-shape shape-5"></div>
-    <div class="bg-shape shape-6"></div>
-
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <h1>2026년부터는 중딩!!</h1>
+        <h1>2026 새해 카운트다운</h1>
 
         <div class="countdown" id="countdown">
             <div class="time-block">
@@ -310,10 +198,14 @@
                 <div class="time-value" id="seconds">00</div>
                 <div class="time-label">초</div>
             </div>
+            <div class="time-block">
+                <div class="time-value" id="milliseconds">000</div>
+                <div class="time-label">밀리초</div>
+            </div>
         </div>
 
         <div class="celebration" id="celebration">
-            축하해! 이제 중학생이다!!
+            🎉 새해 복 많이 받으세요! 🎊
         </div>
 
         <div class="current-time">
@@ -351,120 +243,61 @@
             }
         }
 
-        // 피아노 소리 생성
-        function playPiano(frequency, startTime, duration, volume = 0.15) {
-            if (!audioContext) return;
+        // 배경음악 - 앰비언트 패드 사운드
+        function createPadSound(frequency, duration, volume = 0.08) {
+            if (!audioContext) return null;
 
-            // 피아노 소리를 위한 다중 오실레이터
-            const oscillators = [];
+            const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             const filter = audioContext.createBiquadFilter();
 
+            oscillator.type = 'sine';
+            oscillator.frequency.value = frequency;
+
             filter.type = 'lowpass';
-            filter.frequency.value = 2000;
+            filter.frequency.value = 800;
+
+            oscillator.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(audioContext.destination);
 
-            // 기본음 + 배음들로 피아노 느낌
-            const harmonics = [1, 2, 3, 4];
-            const volumes = [1, 0.5, 0.25, 0.125];
+            // 부드러운 페이드 인/아웃
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 2);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + duration - 2);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
 
-            harmonics.forEach((h, i) => {
-                const osc = audioContext.createOscillator();
-                const oscGain = audioContext.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = frequency * h;
-                oscGain.gain.value = volumes[i] * volume;
-                osc.connect(oscGain);
-                oscGain.connect(filter);
-                osc.start(startTime);
-                osc.stop(startTime + duration + 0.5);
-                oscillators.push(osc);
-            });
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
 
-            // 피아노 엔벨로프 (빠른 어택, 서서히 감소)
-            gainNode.gain.setValueAtTime(0, startTime);
-            gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.02);
-            gainNode.gain.exponentialRampToValueAtTime(volume * 0.7, startTime + 0.1);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration + 0.3);
+            return { oscillator, gainNode };
         }
 
-        // 캐논 코드 진행 (D장조)
-        let canonIndex = 0;
-        let melodyIndex = 0;
-
-        // 파헬벨 캐논 베이스 코드 (D장조)
-        const canonChords = [
-            { bass: 146.83, chord: [293.66, 370.00, 440.00] },  // D
-            { bass: 110.00, chord: [220.00, 277.18, 329.63] },  // A
-            { bass: 123.47, chord: [246.94, 293.66, 370.00] },  // Bm
-            { bass: 92.50,  chord: [185.00, 220.00, 277.18] },  // F#m
-            { bass: 98.00,  chord: [196.00, 246.94, 293.66] },  // G
-            { bass: 146.83, chord: [293.66, 370.00, 440.00] },  // D
-            { bass: 98.00,  chord: [196.00, 246.94, 293.66] },  // G
-            { bass: 110.00, chord: [220.00, 277.18, 329.63] },  // A
-        ];
-
-        // 캐논 멜로디 (유명한 바이올린 파트)
-        const canonMelody = [
-            // 첫 번째 프레이즈
-            { note: 587.33, dur: 1 },    // D5
-            { note: 523.25, dur: 1 },    // C#5
-            { note: 493.88, dur: 1 },    // B4
-            { note: 440.00, dur: 1 },    // A4
-            { note: 392.00, dur: 1 },    // G4
-            { note: 369.99, dur: 1 },    // F#4
-            { note: 392.00, dur: 1 },    // G4
-            { note: 440.00, dur: 1 },    // A4
-            // 두 번째 프레이즈
-            { note: 587.33, dur: 0.5 },  // D5
-            { note: 523.25, dur: 0.5 },  // C#5
-            { note: 493.88, dur: 0.5 },  // B4
-            { note: 523.25, dur: 0.5 },  // C#5
-            { note: 440.00, dur: 0.5 },  // A4
-            { note: 493.88, dur: 0.5 },  // B4
-            { note: 392.00, dur: 0.5 },  // G4
-            { note: 440.00, dur: 0.5 },  // A4
-            { note: 369.99, dur: 0.5 },  // F#4
-            { note: 392.00, dur: 0.5 },  // G4
-            { note: 440.00, dur: 0.5 },  // A4
-            { note: 392.00, dur: 0.5 },  // G4
-            { note: 369.99, dur: 0.5 },  // F#4
-            { note: 329.63, dur: 0.5 },  // E4
-            { note: 369.99, dur: 0.5 },  // F#4
-            { note: 440.00, dur: 0.5 },  // A4
-        ];
-
-        function playCanonSection() {
+        // 아르페지오 멜로디
+        function playArpeggio() {
             if (!audioContext || !bgmPlaying) return;
 
+            const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63]; // C4, E4, G4, C5, G4, E4
             const baseTime = audioContext.currentTime;
-            const beatDuration = 0.5; // 한 박자 길이
 
-            // 베이스와 코드 연주 (8마디)
-            for (let i = 0; i < 8; i++) {
-                const chordData = canonChords[(canonIndex + i) % 8];
-                const chordTime = baseTime + i * beatDuration * 2;
+            notes.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
 
-                // 베이스음
-                playPiano(chordData.bass, chordTime, beatDuration * 2, 0.12);
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
 
-                // 코드 아르페지오
-                chordData.chord.forEach((note, j) => {
-                    playPiano(note, chordTime + j * 0.15, beatDuration * 1.5, 0.08);
-                });
-            }
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
 
-            // 멜로디 연주
-            let melodyTime = baseTime;
-            for (let i = 0; i < 8; i++) {
-                const note = canonMelody[(melodyIndex + i) % canonMelody.length];
-                playPiano(note.note, melodyTime, note.dur * beatDuration * 1.2, 0.18);
-                melodyTime += note.dur * beatDuration;
-            }
+                const startTime = baseTime + i * 0.5;
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.06, startTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.45);
 
-            canonIndex = (canonIndex + 8) % 8;
-            melodyIndex = (melodyIndex + 8) % canonMelody.length;
+                osc.start(startTime);
+                osc.stop(startTime + 0.5);
+            });
         }
 
         // 배경음악 시작
@@ -475,19 +308,37 @@
             if (!audioContext) return;
 
             bgmPlaying = true;
-            canonIndex = 0;
-            melodyIndex = 0;
             document.getElementById('musicControl').textContent = '🔊';
 
-            // 즉시 첫 섹션 재생
-            playCanonSection();
+            // 지속적인 패드 코드 (C major)
+            function playPadChord() {
+                if (!bgmPlaying) return;
+                const chords = [
+                    [130.81, 164.81, 196.00], // C3, E3, G3
+                    [146.83, 174.61, 220.00], // D3, F3, A3
+                    [164.81, 196.00, 246.94], // E3, G3, B3
+                    [130.81, 164.81, 196.00], // C3, E3, G3
+                ];
+                const chord = chords[Math.floor(Math.random() * chords.length)];
+                chord.forEach(freq => createPadSound(freq, 8, 0.06));
+            }
 
-            // 8박자마다 반복 (4초)
+            // 초기 패드 시작
+            playPadChord();
+
+            // 8초마다 새 코드
             bgmInterval = setInterval(() => {
                 if (bgmPlaying) {
-                    playCanonSection();
+                    playPadChord();
                 }
-            }, 4000);
+            }, 8000);
+
+            // 3초마다 아르페지오
+            setInterval(() => {
+                if (bgmPlaying && Math.random() > 0.3) {
+                    playArpeggio();
+                }
+            }, 3000);
         }
 
         // 배경음악 중지
@@ -582,10 +433,12 @@
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const milliseconds = diff % 1000;
 
             document.getElementById('hours').textContent = String(hours).padStart(2, '0');
             document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
             document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            document.getElementById('milliseconds').textContent = String(milliseconds).padStart(3, '0');
 
             // 현재 시각 표시
             const currentDate = new Date(now);
@@ -601,7 +454,7 @@
         }
 
         function createFireworks() {
-            const colors = ['#e63946', '#457b9d', '#f4a261', '#2a9d8f', '#e9c46a', '#1d3557'];
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'];
             const particles = document.getElementById('particles');
 
             setInterval(() => {
@@ -638,13 +491,9 @@
             particle.style.left = Math.random() * 100 + '%';
             particle.style.top = '-20px';
             particle.style.animationDuration = (3 + Math.random() * 4) + 's';
-            particle.style.background = ['#e63946', '#457b9d', '#f4a261', '#2a9d8f', '#e9c46a'][Math.floor(Math.random() * 5)];
-            particle.style.width = (8 + Math.random() * 15) + 'px';
+            particle.style.background = ['gold', 'silver', '#ff6b6b', '#48dbfb'][Math.floor(Math.random() * 4)];
+            particle.style.width = (5 + Math.random() * 10) + 'px';
             particle.style.height = particle.style.width;
-            // 피카소 스타일: 랜덤 도형
-            const shapes = ['0%', '50%', '0% 50%'];
-            particle.style.borderRadius = shapes[Math.floor(Math.random() * 3)];
-            particle.style.transform = `rotate(${Math.random() * 45}deg)`;
 
             particles.appendChild(particle);
             setTimeout(() => particle.remove(), 7000);
