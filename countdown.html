@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026년부터는 중딩!!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f5f0e6;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #1a1a1a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 피카소 스타일 배경 도형들 */
+        .bg-shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: #e63946;
+            top: -50px;
+            left: -50px;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            opacity: 0.7;
+        }
+
+        .shape-2 {
+            width: 250px;
+            height: 400px;
+            background: #457b9d;
+            bottom: -100px;
+            right: -50px;
+            clip-path: polygon(0 0, 100% 20%, 80% 100%, 20% 80%);
+            opacity: 0.6;
+        }
+
+        .shape-3 {
+            width: 200px;
+            height: 200px;
+            background: #f4a261;
+            top: 20%;
+            right: 10%;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            opacity: 0.5;
+        }
+
+        .shape-4 {
+            width: 150px;
+            height: 300px;
+            background: #2a9d8f;
+            bottom: 10%;
+            left: 5%;
+            clip-path: polygon(20% 0%, 100% 10%, 80% 90%, 0% 100%);
+            opacity: 0.5;
+        }
+
+        .shape-5 {
+            width: 180px;
+            height: 180px;
+            border: 8px solid #1d3557;
+            top: 60%;
+            right: 20%;
+            transform: rotate(15deg);
+        }
+
+        .shape-6 {
+            width: 120px;
+            height: 120px;
+            background: #e9c46a;
+            top: 10%;
+            left: 20%;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            opacity: 0.6;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            padding: 3rem 4rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 4px solid #1a1a1a;
+            position: relative;
+            transform: rotate(-1deg);
+            box-shadow: 12px 12px 0 #1a1a1a;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            color: #1a1a1a;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: -5px;
+            right: -5px;
+            height: 12px;
+            background: #e63946;
+            z-index: -1;
+            transform: rotate(-1deg);
+        }
+
+        .countdown {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .time-block {
+            position: relative;
+            padding: 1.5rem 2rem;
+            min-width: 130px;
+            background: #fff;
+            border: 3px solid #1a1a1a;
+            transform: rotate(2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .time-block:nth-child(2) {
+            transform: rotate(-2deg);
+            background: #e9c46a;
+        }
+
+        .time-block:nth-child(3) {
+            transform: rotate(1deg);
+            background: #457b9d;
+        }
+
+        .time-block:nth-child(3) .time-value,
+        .time-block:nth-child(3) .time-label {
+            color: #fff;
+        }
+
+        .time-block:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .time-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 400;
+            color: #1a1a1a;
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .current-time {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .celebration {
+            display: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        .celebration::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            right: -20px;
+            height: 20px;
+            background: #2a9d8f;
+            z-index: -1;
+            transform: translateY(-50%) rotate(-2deg);
+        }
+
+        .firework {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            animation: firework 1.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes firework {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .audio-hint {
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.2rem;
+            background: #1a1a1a;
+            border: none;
+            color: #f5f0e6;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .audio-hint:hover {
+            background: #e63946;
+            transform: translateY(-2px);
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1a1a1a;
+            border: 3px solid #1a1a1a;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+            transform: rotate(5deg);
+        }
+
+        .music-control:hover {
+            background: #e63946;
+            transform: rotate(0deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- 피카소 스타일 배경 도형들 -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="bg-shape shape-4"></div>
+    <div class="bg-shape shape-5"></div>
+    <div class="bg-shape shape-6"></div>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <h1>2026년부터는 중딩!!</h1>
+
+        <div class="countdown" id="countdown">
+            <div class="time-block">
+                <div class="time-value" id="hours">00</div>
+                <div class="time-label">시간</div>
+            </div>
+            <div class="time-block">
+                <div class="time-value" id="minutes">00</div>
+                <div class="time-label">분</div>
+            </div>
+            <div class="time-block">
+                <div class="time-value" id="seconds">00</div>
+                <div class="time-label">초</div>
+            </div>
+        </div>
+
+        <div class="celebration" id="celebration">
+            축하해! 이제 중학생이다!!
+        </div>
+
+        <div class="current-time">
+            현재 시각: <span id="currentTime"></span>
+        </div>
+
+        <div class="audio-hint" id="audioHint">
+            화면을 클릭하면 카운트다운 소리가 활성화됩니다
+        </div>
+    </div>
+
+    <div class="music-control" id="musicControl" title="배경음악 켜기/끄기">
+        🔇
+    </div>
+
+    <script>
+        const targetDate = new Date('2026-01-01T00:00:00');
+
+        // 시간 동기화를 위한 오프셋 계산 (서버 시간과의 차이 보정용)
+        let timeOffset = 0;
+
+        // 오디오 컨텍스트 (사용자 인터랙션 후 초기화)
+        let audioContext = null;
+        let lastBeepSecond = -1;
+        let celebrationPlayed = false;
+        let bgmPlaying = false;
+        let bgmNodes = [];
+        let bgmInterval = null;
+
+        // 오디오 컨텍스트 초기화 (사용자 클릭 필요)
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                document.getElementById('audioHint').style.display = 'none';
+            }
+        }
+
+        // 배경음악 - 앰비언트 패드 사운드
+        function createPadSound(frequency, duration, volume = 0.08) {
+            if (!audioContext) return null;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.value = frequency;
+
+            filter.type = 'lowpass';
+            filter.frequency.value = 800;
+
+            oscillator.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // 부드러운 페이드 인/아웃
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 2);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + duration - 2);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+
+            return { oscillator, gainNode };
+        }
+
+        // 아르페지오 멜로디
+        function playArpeggio() {
+            if (!audioContext || !bgmPlaying) return;
+
+            const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63]; // C4, E4, G4, C5, G4, E4
+            const baseTime = audioContext.currentTime;
+
+            notes.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                const startTime = baseTime + i * 0.5;
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.06, startTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.45);
+
+                osc.start(startTime);
+                osc.stop(startTime + 0.5);
+            });
+        }
+
+        // 배경음악 시작
+        function startBGM() {
+            if (!audioContext) {
+                initAudio();
+            }
+            if (!audioContext) return;
+
+            bgmPlaying = true;
+            document.getElementById('musicControl').textContent = '🔊';
+
+            // 지속적인 패드 코드 (C major)
+            function playPadChord() {
+                if (!bgmPlaying) return;
+                const chords = [
+                    [130.81, 164.81, 196.00], // C3, E3, G3
+                    [146.83, 174.61, 220.00], // D3, F3, A3
+                    [164.81, 196.00, 246.94], // E3, G3, B3
+                    [130.81, 164.81, 196.00], // C3, E3, G3
+                ];
+                const chord = chords[Math.floor(Math.random() * chords.length)];
+                chord.forEach(freq => createPadSound(freq, 8, 0.06));
+            }
+
+            // 초기 패드 시작
+            playPadChord();
+
+            // 8초마다 새 코드
+            bgmInterval = setInterval(() => {
+                if (bgmPlaying) {
+                    playPadChord();
+                }
+            }, 8000);
+
+            // 3초마다 아르페지오
+            setInterval(() => {
+                if (bgmPlaying && Math.random() > 0.3) {
+                    playArpeggio();
+                }
+            }, 3000);
+        }
+
+        // 배경음악 중지
+        function stopBGM() {
+            bgmPlaying = false;
+            document.getElementById('musicControl').textContent = '🔇';
+            if (bgmInterval) {
+                clearInterval(bgmInterval);
+                bgmInterval = null;
+            }
+        }
+
+        // 배경음악 토글
+        function toggleBGM() {
+            if (bgmPlaying) {
+                stopBGM();
+            } else {
+                startBGM();
+            }
+        }
+
+        // 비프음 생성
+        function playBeep(frequency, duration, volume = 0.5) {
+            if (!audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // 새해 축하 사운드 (화음)
+        function playCelebration() {
+            if (!audioContext || celebrationPlayed) return;
+            celebrationPlayed = true;
+
+            const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            frequencies.forEach((freq, i) => {
+                setTimeout(() => {
+                    playBeep(freq, 1.5, 0.3);
+                }, i * 100);
+            });
+
+            // 추가 팡파레
+            setTimeout(() => {
+                [783.99, 987.77, 1174.66].forEach((freq, i) => {
+                    setTimeout(() => playBeep(freq, 1, 0.25), i * 150);
+                });
+            }, 500);
+        }
+
+        // Performance API를 사용한 정밀한 시간 측정
+        function getAccurateTime() {
+            return Date.now() + timeOffset;
+        }
+
+        function updateCountdown() {
+            const now = getAccurateTime();
+            const diff = targetDate.getTime() - now;
+
+            if (diff <= 0) {
+                // 새해!
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('celebration').style.display = 'block';
+                playCelebration();
+                createFireworks();
+                return;
+            }
+
+            // 마지막 10초 카운트다운 소리
+            const totalSeconds = Math.ceil(diff / 1000);
+            if (totalSeconds <= 10 && totalSeconds !== lastBeepSecond && totalSeconds > 0) {
+                lastBeepSecond = totalSeconds;
+                // 마지막 3초는 더 높은 음, 더 큰 소리
+                if (totalSeconds <= 3) {
+                    playBeep(880, 0.15, 0.7); // A5 - 높은 음
+                } else {
+                    playBeep(660, 0.1, 0.5); // E5 - 일반 음
+                }
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            // 현재 시각 표시
+            const currentDate = new Date(now);
+            document.getElementById('currentTime').textContent = currentDate.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+        }
+
+        function createFireworks() {
+            const colors = ['#e63946', '#457b9d', '#f4a261', '#2a9d8f', '#e9c46a', '#1d3557'];
+            const particles = document.getElementById('particles');
+
+            setInterval(() => {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight * 0.5;
+
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                    const angle = (Math.PI * 2 * i) / 30;
+                    const velocity = 50 + Math.random() * 100;
+                    const dx = Math.cos(angle) * velocity;
+                    const dy = Math.sin(angle) * velocity;
+
+                    particle.style.transform = `translate(${dx}px, ${dy}px)`;
+                    particle.style.boxShadow = `0 0 6px ${particle.style.background}`;
+
+                    particles.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 1500);
+                }
+            }, 500);
+        }
+
+        // 10초마다 배경에 파티클 생성 (새해 전 분위기)
+        function createAmbientParticle() {
+            const particles = document.getElementById('particles');
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = '-20px';
+            particle.style.animationDuration = (3 + Math.random() * 4) + 's';
+            particle.style.background = ['#e63946', '#457b9d', '#f4a261', '#2a9d8f', '#e9c46a'][Math.floor(Math.random() * 5)];
+            particle.style.width = (8 + Math.random() * 15) + 'px';
+            particle.style.height = particle.style.width;
+            // 피카소 스타일: 랜덤 도형
+            const shapes = ['0%', '50%', '0% 50%'];
+            particle.style.borderRadius = shapes[Math.floor(Math.random() * 3)];
+            particle.style.transform = `rotate(${Math.random() * 45}deg)`;
+
+            particles.appendChild(particle);
+            setTimeout(() => particle.remove(), 7000);
+        }
+
+        // 매 프레임마다 업데이트 (requestAnimationFrame 사용으로 부드러운 밀리초 표시)
+        function animate() {
+            updateCountdown();
+            requestAnimationFrame(animate);
+        }
+
+        // 시작
+        animate();
+        setInterval(createAmbientParticle, 300);
+
+        // 클릭으로 오디오 활성화
+        document.body.addEventListener('click', initAudio, { once: false });
+        document.body.addEventListener('touchstart', initAudio, { once: false });
+
+        // 음악 컨트롤 버튼
+        document.getElementById('musicControl').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleBGM();
+        });
+    </script>
+</body>
+</html>
